@@ -1,0 +1,73 @@
+﻿@model AplicacaoLoteria.Models.SorteioViewModels
+@{
+    ViewBag.Title = "Apostas";
+}
+
+<h2>Apostas</h2>
+<table id="TbResultado" class="tabelaPadrao">
+    <thead>
+        <tr>
+            <th align="center">
+                Identificador
+            </th>
+            <th class="center">
+                Data e Hora
+            </th>
+            <th align="center">
+                Escolha dos Números
+            </th>
+            <th align="center">
+                Sorteio
+            </th>
+            <th class="center">
+                Acertos
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Apostas)
+            {
+            <tr style="font-size: 12px; font-family: Tahoma;">
+                <td align="left" style="width: 20% !important;">
+                    @item.IdColuna
+                </td>
+                <td align="left" style="width: 20% !important;">
+                    @item.DataHora
+                </td>
+                <td align="left" style="width: 20% !important;">
+                    @for (int i = 0; i < item.ListaNumerosEscolhidos.Count(); i++)
+                    {
+                        if (i > 0)
+                        {
+                            <b> - @item.ListaNumerosEscolhidos[i].ToString("00") </b>
+                        }
+                        else
+                        {
+                            <b>@item.ListaNumerosEscolhidos[i].ToString("00") </b>
+                        }
+                    }
+
+                </td>
+                <td align="left" style="width: 20% !important;">
+                    @for (int i = 0; i < Model.NumerosSorteados.Count(); i++)
+                    {
+                        if (i > 0)
+                        {
+                            <b> - @Model.NumerosSorteados[i].ToString("00") </b>
+                        }
+                        else
+                        {
+                            <b>@Model.NumerosSorteados[i].ToString("00") </b>
+                        }
+                    }
+                </td>
+                <td align="left" style="width: 20% !important;">
+                    @item.ValorAcertos
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

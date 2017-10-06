@@ -1,0 +1,147 @@
+﻿@model AplicacaoLoteria.Models.SorteioViewModels
+
+<h2><center>JOGO DA MEGA SENA</center></h2>
+<table id="filtro" cellpadding="2" cellspacing="10" class="tabelaFiltro">
+
+    <tbody>
+        <tr>
+            <td style="padding: 0 20px 20px 20px">
+                <h4><span class="label label-default">Opção Surpresinha:</span></h4>
+                <div class="barraBotoes" style="margin: 0; text-align: left">
+                    <input type="submit" id="surpresinha" class="btPadrao" style="margin: 0" value="Surpresinha" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0 20px 20px 20px">
+                <h4><span class="label label-default">Entre com os valores da sua Aposta:</span></h4>
+                <h5><span class="label label-warning">Valores entre 1 a 60 por campo.!.</span></h5>
+                <input type="text" id="n1" name="name" value="" style="width: 54px;" onkeyup="NaoAceitaLetras(this);" maxlength="2" />
+                <input type="text" id="n2" name="name" value="" style="width: 54px;" onkeyup="NaoAceitaLetras(this);" maxlength="2" />
+                <input type="text" id="n3" name="name" value="" style="width: 54px;" onkeyup="NaoAceitaLetras(this);" maxlength="2" />
+                <input type="text" id="n4" name="name" value="" style="width: 54px;" onkeyup="NaoAceitaLetras(this);" maxlength="2" />
+                <input type="text" id="n5" name="name" value="" style="width: 54px;" onkeyup="NaoAceitaLetras(this);" maxlength="2" />
+                <input type="text" id="n6" name="name" value="" style="width: 54px;" onkeyup="NaoAceitaLetras(this);" maxlength="2" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="barraBotoes">
+                    <input id="limpar" type="button" class="btPadrao" value="Limpar" />
+                    <input id="inserir" type="button" class="btPadrao" value="Inserir" />
+                    <input id="sorteio" type="button" class="btPadrao" value="Sorteio" />
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="dialog" style="padding-top:20px">
+    @Html.Partial("Apostas", Model)
+</div>
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+            $("#inserir").on("click", function () {
+                var tn1 = $("#n1").val() * 1;
+                var tn2 = $("#n2").val() * 1;
+                var tn3 = $("#n3").val() * 1;
+                var tn4 = $("#n4").val() * 1;
+                var tn5 = $("#n5").val() * 1;
+                var tn6 = $("#n6").val() * 1;
+                $.ajax({
+                    type: "POST",
+                    url: "/Loteria/CadastrarAposta",
+                    async: false,
+                    data: { n1: tn1, n2: tn2, n3: tn3, n4: tn4, n5: tn5, n6: tn6 },
+                    dataType: 'Html',
+                    success: function (response) {
+                        $('#dialog').html(response);
+                    },
+                    failure: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+
+                });
+                for (var i = 1; i <= 6; i++) {
+                    $("#n" + i).val("");
+                }
+
+            });
+
+            $("#surpresinha").on("click", function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Loteria/Surpresinha",
+                    async: false,
+                    data: {},
+                    dataType: 'Html',
+                    success: function (response) {
+                        $('#dialog').html(response);
+                    },
+                    failure: function (jqXHR, textStatus, errorThrown) {
+                        alert("Erro");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Erro");
+                    }
+                });
+            });
+
+            $("#sorteio").on("click", function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Loteria/Sorteios",
+                    async: false,
+                    data: {},
+                    dataType: 'Html',
+                    success: function (response) {
+                        $('#dialog').html(response);
+                    },
+                    failure: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            });
+
+            $("#limpar").on("click", function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Loteria/LimparApostas",
+                    async: false,
+                    data: {},
+                    dataType: 'Html',
+                    success: function (response) {
+                        $('#dialog').html(response);
+                    },
+                    failure: function (jqXHR, textStatus, errorThrown) {
+                        alert("Erro");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Erro");
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function NaoAceitaLetras(num) {
+            var er = /[^0-9.]/;
+            er.lastIndex = 0;
+            var campo = num;
+            if (er.test(campo.value)) {
+                campo.value = "";
+            }
+        }
+    </script>
+}
